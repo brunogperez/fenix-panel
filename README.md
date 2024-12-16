@@ -1,60 +1,35 @@
-# FenixPanel
+# Proyecto final Angular - Bruno Perez
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.5.
+Este proyecto es una aplicación web creada con **Angular**, diseñada para gestionar el registro y seguimiento de estudiantes/cursos/inscripciones. Aprovecha tecnologías como Angular Material para una interfaz de usuario intuitiva, NgRx para el manejo eficiente del estado, y se enfoca en proporcionar una experiencia fluida y escalable.
 
-## Development server
+## Características principales
+- [Funcionalidad clave 1,  ABM de usuarios]
+- [Funcionalidad clave 2,  ABM de estudiantes]
+- [Funcionalidad clave 3,  ABM de cursos]
+- [Funcionalidad clave 4,  Gestión de cursos e inscripciones]
+- [Funcionalidad clave 5,  Uso de Angular Material para interfaces modernas]
+- Implementación de NgRx para el manejo de estado global.
 
-To start a local development server, run:
+## Tecnologías utilizadas
+- **Angular**: Framework principal.
+- **Angular Material**: Componentes UI.
+- **NgRx**: Manejo del estado.
+- **TypeScript**: Lenguaje de programación.
+- **SweetAlert2**: Alertas modales interactivas.
+- **JSON-Server**: Emulador de API.
+- **HTML5 y SCSS**: Estructura y estilos.
 
-```bash
-ng serve
-```
+## Cuentas ADMIN y USER 
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+-Admin 
 
-## Code scaffolding
+user: admin@admin.com
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+password: admin123123
 
-```bash
-ng generate component component-name
-```
+-User
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+user: test@test.com
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+password: test123123
 # fenix-panel

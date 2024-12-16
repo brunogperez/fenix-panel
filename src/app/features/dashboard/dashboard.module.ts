@@ -4,9 +4,11 @@ import { CommonModule } from '@angular/common';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 
+/* IMPORTS PROPIOS DEL PROYECTO */
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { SharedModule } from '../../shared/shared.module';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -15,7 +17,8 @@ import { SharedModule } from '../../shared/shared.module';
     DashboardRoutingModule,
     MatSidenavModule,
     MatToolbarModule,
-    SharedModule
+    SharedModule,
+    MatListModule,
   ],
   exports: [DashboardComponent],
 })

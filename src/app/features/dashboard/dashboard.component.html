@@ -1,26 +1,54 @@
 <mat-drawer-container class="example-container" autosize>
-  <mat-drawer #drawer class="example-sidenav" mode="side">
-    <p>Auto-resizing sidenav</p>
-    @if (showFiller) {
-    <p>Lorem, ipsum dolor sit amet consectetur.</p>
-    }
-    <button (click)="showFiller = !showFiller" mat-raised-button>
-      Toggle extra text
-    </button>
+  <!-- SECCION IZQUIERDA (PARTE INTERIOR DEL SIDEBAR) -->
+  <mat-drawer #drawer class="example-sidenav bg-table" mode="over">
+    <mat-nav-list>
+      <a mat-list-item routerLink="home">Inicio</a>
+      <a mat-list-item routerLink="users" *ngIf="isAdmin$ | async">Usuarios</a>
+      <a mat-list-item routerLink="students">Alumnos</a>
+      <a mat-list-item routerLink="courses">Cursos</a>
+      <a mat-list-item routerLink="inscriptions">Inscripciones</a>
+    </mat-nav-list>
   </mat-drawer>
 
+  <!-- SECCION DERECHA DEL CONTENIDO -->
   <div class="example-sidenav-content">
-    <mat-toolbar>
-      <button
-        mat-icon-button
-        class="example-icon"
-        aria-label="Example icon-button with menu icon"
-        (click)="drawer.toggle()"
-      >
-        <mat-icon>menu</mat-icon>
-      </button>
-      <span>My App</span>
-      <span class="example-spacer"></span>
-    </mat-toolbar>
+    <div>
+      <mat-toolbar class="d-flex justify-content-between w-100 h-100 p-3">
+        <div>
+          <button
+            (click)="drawer.toggle()"
+            mat-icon-button
+            class="example-icon"
+          >
+            <mat-icon>menu</mat-icon>
+          </button>
+          <img
+            src="https://www.coderhouse.com/imgs/ch.svg"
+            alt="Logo de Coderhouse"
+          />
+        </div>
+        <div
+          class="d-flex gap-3 align-items-center mx-5"
+          *ngIf="authUser$ | async; let authUser"
+        >
+          <mat-icon> person </mat-icon>
+          <p class="my-auto textColor" *ngIf="isAdmin$ | async">
+            {{ authUser.role | uppercase }}
+          </p>
+          <p class="my-auto">
+            {{ authUser.firstName | titlecase }}
+            {{ authUser.lastName | titlecase }}
+          </p>
+          <button mat-flat-button class="logout" (click)="logout()">
+            <mat-icon> logout </mat-icon>
+            <p class="m-auto">Logout</p>
+          </button>
+        </div>
+      </mat-toolbar>
+
+      <h3 class="route-display text-center m-3">{{ currentRouteName }}</h3>
+    </div>
+
+    <router-outlet />
   </div>
 </mat-drawer-container>

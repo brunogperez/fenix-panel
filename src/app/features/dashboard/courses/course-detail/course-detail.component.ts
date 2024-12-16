@@ -6,13 +6,12 @@ import { selectorInscriptions } from '../../inscriptions/store/inscription.selec
 import { combineLatest, map, Observable } from 'rxjs';
 import { InscriptionActions } from '../../inscriptions/store/inscription.actions';
 import { Inscription } from '../../inscriptions/models';
-import { Student } from '../../students/models';
-import { selectorStudents } from '../../students/store/student.selectors';
-import { StudentActions } from '../../students/store/student.actions';
+import { Subscriber } from '../../subscribers/models';
+import { selectorSubscribers } from '../../subscribers/store/subscriber.selectors';
+import { SubscriberActions } from '../../subscribers/store/subscriber.actions';
 import Swal from 'sweetalert2';
 import { CourseActions } from '../store/course.actions';
-import {  selectCourseById } from '../store/course.selectors';
-
+import { selectCourseById } from '../store/course.selectors';
 
 @Component({
   selector: 'app-course-detail',
@@ -25,12 +24,12 @@ export class CourseDetailComponent implements OnInit {
   classList: ClassItem[] = [];
   inscriptions$: Observable<Inscription[]>;
   inscriptionsByCourse$: Observable<Inscription[]>;
-  studentsByCourse$: Observable<Student[]>;
-  students$: Observable<Student[]>;
+  studentsByCourse$: Observable<Subscriber[]>;
+  students$: Observable<Subscriber[]>;
 
   constructor(private activatedRoute: ActivatedRoute, private store: Store) {
     this.courseId = this.activatedRoute.snapshot.params['id'];
-    this.students$ = this.store.select(selectorStudents);
+    this.students$ = this.store.select(selectorSubscribers);
     this.course$ = this.store.select(selectCourseById);
     this.inscriptions$ = this.store.select(selectorInscriptions);
     this.inscriptionsByCourse$ = this.inscriptions$.pipe(
@@ -46,23 +45,23 @@ export class CourseDetailComponent implements OnInit {
       this.inscriptionsByCourse$,
     ]).pipe(
       map(([students, inscriptionsByCourse]) => {
-        const studentIds = inscriptionsByCourse.map((i) => i.studentId);
-        return students.filter((student) => studentIds.includes(student.id));
+        const subscriberIds = inscriptionsByCourse.map((i) => i.subscriberId);
+        return students.filter((student) => subscriberIds.includes(student.id));
       })
     );
   }
   ngOnInit(): void {
     this.store.dispatch(InscriptionActions.loadInscriptions());
-    this.store.dispatch(StudentActions.loadStudents());
+    this.store.dispatch(SubscriberActions.loadSubscribers());
     this.store.dispatch(CourseActions.loadCourseById({ id: this.courseId }));
   }
 
-  onDeleteInscription(studentId: string) {
+  onDeleteInscription(subscriberId: string) {
     const courseRoute = this.courseId;
     if (courseRoute) {
       this.inscriptions$.subscribe((inscriptions) => {
         const filteredInscriptions = inscriptions.filter(
-          (inscription) => inscription.studentId === studentId
+          (inscription) => inscription.subscriberId === subscriberId
         );
         if (filteredInscriptions.length > 0) {
           Swal.fire({

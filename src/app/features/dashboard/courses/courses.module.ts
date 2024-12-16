@@ -12,8 +12,8 @@ import { courseFeature } from './store/course.reducer';
 import { StoreModule } from '@ngrx/store';
 import { inscriptionFeature } from '../inscriptions/store/inscription.reducer';
 import { InscriptionEffects } from '../inscriptions/store/inscription.effects';
-import { studentFeature } from '../students/store/student.reducer';
-import { StudentEffects } from '../students/store/student.effects';
+import { subscriberFeature } from '../subscribers/store/subscriber.reducer';
+import { SubscriberEffects } from '../subscribers/store/subscriber.effects';
 
 @NgModule({
   declarations: [
@@ -25,12 +25,12 @@ import { StudentEffects } from '../students/store/student.effects';
     CommonModule,
     CoursesRoutingModule,
     SharedModule,
-    StoreModule.forFeature(studentFeature),
+    StoreModule.forFeature(subscriberFeature),
     StoreModule.forFeature(inscriptionFeature),
     StoreModule.forFeature(courseFeature),
     EffectsModule.forFeature([CourseEffects]),
     EffectsModule.forFeature([InscriptionEffects]),
-    EffectsModule.forFeature([StudentEffects]),
+    EffectsModule.forFeature([SubscriberEffects]),
   ],
 })
 export class CoursesModule {}

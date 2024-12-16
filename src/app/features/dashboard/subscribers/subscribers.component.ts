@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { StudentsDialogComponent } from './student-dialog/student-dialog.component';
-import { Student } from './models';
+import { SubscriberDialogComponent } from './subscriber-dialog/subscriber-dialog.component';
+import { Subscriber } from './models';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
-import { StudentsService } from '../../../core/services/students.service';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -12,54 +11,45 @@ import {
   Observable,
   startWith,
   Subject,
-  switchMap,
 } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectorStudents } from './store/student.selectors';
-import { StudentActions } from './store/student.actions';
+import { selectorSubscribers } from './store/subscriber.selectors';
+import { SubscriberActions } from './store/subscriber.actions';
 import { User } from '../users/models';
 import { selectAuthUser } from '../../../store/selectors/auth.selectors';
-import { InscriptionService } from '../../../core/services/inscriptions.service';
 
 @Component({
-  selector: 'app-students',
-  templateUrl: './students.component.html',
-  styleUrl: './students.component.scss',
+  selector: 'app-subscribers',
+  templateUrl: './subscribers.component.html',
+  styleUrl: './subscribers.component.scss',
 })
-export class StudentsComponent implements OnInit {
-  displayedColumns: string[] = [
-    'id',
-    'name',
-    'email',
-    'birthdate',
-    'createdAt',
-    'actions',
-  ];
+export class SubscriberComponent implements OnInit {
+  displayedColumns: string[] = ['id', 'name', 'email', 'createdAt', 'actions'];
   user$: Observable<User | null>;
   isAdmin$: Observable<boolean>;
-  students$: Observable<Student[]>;
+  subscriber$: Observable<Subscriber[]>;
 
   searchTerm$ = new Subject<string>();
-  dataSource: Student[] = [];
+  dataSource: Subscriber[] = [];
 
   isLoading = false;
   constructor(
     private matDialog: MatDialog,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private store: Store,
+    private store: Store
   ) {
     this.user$ = this.store.select(selectAuthUser);
     this.isAdmin$ = this.user$.pipe(map((user) => user?.role === 'admin'));
-    this.students$ = this.store.select(selectorStudents);
+    this.subscriber$ = this.store.select(selectorSubscribers);
   }
 
   ngOnInit(): void {
-  
+    
     this.searchTerm$
       .pipe(startWith(''), debounceTime(400), distinctUntilChanged())
       .subscribe((term) => {
-        this.store.dispatch(StudentActions.searchStudents({ term }));
+        this.store.dispatch(SubscriberActions.searchSubscribers({ term }));
       });
   }
 
@@ -72,23 +62,23 @@ export class StudentsComponent implements OnInit {
     this.router.navigate([id, 'detail'], { relativeTo: this.activatedRoute });
   }
 
-  openDialog(editStudent?: Student): void {
+  openDialog(editSubscriber?: Subscriber): void {
     this.matDialog
-      .open(StudentsDialogComponent, { data: { editStudent } })
+      .open(SubscriberDialogComponent, { data: { editSubscriber } })
       .afterClosed()
       .subscribe({
         next: (res) => {
           if (!!res) {
-            if (editStudent) {
+            if (editSubscriber) {
               this.store.dispatch(
-                StudentActions.updateStudent({
-                  id: editStudent.id,
+                SubscriberActions.updateSubscriber({
+                  id: editSubscriber.id,
                   update: res,
                 })
               );
             } else {
               this.store.dispatch(
-                StudentActions.createStudent({ student: res })
+                SubscriberActions.createSubscriber({ subscriber: res })
               );
             }
           }
@@ -106,7 +96,7 @@ export class StudentsComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result: any) => {
       if (result.isConfirmed) {
-        this.store.dispatch(StudentActions.deleteStudent({ id }));
+        this.store.dispatch(SubscriberActions.deleteSubscriber({ id }));
       }
     });
   }

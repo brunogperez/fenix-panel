@@ -64,7 +64,7 @@ export class InscriptionEffects {
         concatMap((action) =>
           this.inscriptionService
             .createInscription({
-              studentId: action.studentId,
+              subscriberId: action.subscriberId,
               courseId: action.courseId,
             })
             .pipe(

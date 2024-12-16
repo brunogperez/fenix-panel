@@ -1,10 +1,10 @@
-import { Course } from "../../courses/models";
-import { Student } from "../../students/models";
+import { Course } from '../../courses/models';
+import { Subscriber } from '../../subscribers/models';
 
 export interface Inscription {
   id: string;
-  studentId: string;
+  subscriberId: string;
   courseId: string;
-  student?: Student;
-  course?: Course
+  student?: Subscriber;
+  course?: Course;
 }

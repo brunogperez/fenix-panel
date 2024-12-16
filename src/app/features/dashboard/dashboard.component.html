@@ -4,7 +4,7 @@
     <mat-nav-list>
       <a mat-list-item routerLink="home">Inicio</a>
       <a mat-list-item routerLink="users" *ngIf="isAdmin$ | async">Usuarios</a>
-      <a mat-list-item routerLink="students">Alumnos</a>
+      <a mat-list-item routerLink="subscribers">Suscriptores</a>
       <a mat-list-item routerLink="courses">Cursos</a>
       <a mat-list-item routerLink="inscriptions">Inscripciones</a>
     </mat-nav-list>
@@ -13,18 +13,14 @@
   <!-- SECCION DERECHA DEL CONTENIDO -->
   <div class="example-sidenav-content">
     <div>
-      <mat-toolbar class="d-flex justify-content-between w-100 h-100 p-3">
+      <mat-toolbar class="d-flex justify-content-between w-100 h-100 p-3 align-items-center">
         <div>
-          <button
-            (click)="drawer.toggle()"
-            mat-icon-button
-            class="example-icon"
-          >
-            <mat-icon>menu</mat-icon>
-          </button>
+    
           <img
-            src="https://www.coderhouse.com/imgs/ch.svg"
-            alt="Logo de Coderhouse"
+            src="https://imgs.search.brave.com/OwPhMJ6hvN8Ljp4XMetWVT9FRFuesoNMzJ2H1LtzVl8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4t/MC5lbW9qaXMud2lr/aS9lbW9qaS1waWNz/L2dvb2dsZS9waG9l/bml4LWdvb2dsZS5w/bmc"
+            alt="Logo de Fenix"
+            class="logo"
+            (click)="drawer.toggle()"
           />
         </div>
         <div

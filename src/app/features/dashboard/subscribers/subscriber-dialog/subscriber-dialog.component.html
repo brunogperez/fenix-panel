@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>
+  {{ data?.editSubscriber == undefined ? "Crear" : "Editar" }} suscriptor
+</h1>
+
+<div mat-dialog-content>
+  <form [formGroup]="subscriberForm">
+    <div class="row">
+      <mat-form-field class="col-6">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="firstName" type="text" />
+
+      </mat-form-field>
+
+      <mat-form-field class="col-6">
+        <mat-label>Apellido</mat-label>
+        <input matInput formControlName="lastName" type="text" />
+
+      </mat-form-field>
+    </div>
+
+    <mat-form-field class="col-12">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" />
+
+    </mat-form-field>
+
+   
+  </form>
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button (click)="onSave()" mat-button>Guardar</button>
+  </div>
+</div>

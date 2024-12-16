@@ -1,8 +1,7 @@
-export interface Student {
+export interface Subscriber {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
-  birthdate: Date;
   createdAt: Date;
 }

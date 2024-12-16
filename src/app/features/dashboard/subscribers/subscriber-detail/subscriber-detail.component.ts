@@ -1,49 +1,51 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Student } from '../models';
-import { Inscription } from '../../inscriptions/models';
-import Swal from 'sweetalert2';
 import { Store } from '@ngrx/store';
+
+import { Subscriber } from '../models';
+import { Course } from '../../courses/models';
+import { Inscription } from '../../inscriptions/models';
+
+import Swal from 'sweetalert2';
 import { InscriptionActions } from '../../inscriptions/store/inscription.actions';
-import { selectorStudents } from '../store/student.selectors';
-import { StudentActions } from '../store/student.actions';
+import { selectorSubscribers } from '../store/subscriber.selectors';
+import { SubscriberActions } from '../store/subscriber.actions';
 import { selectCourse } from '../../courses/store/course.selectors';
 import { CourseActions } from '../../courses/store/course.actions';
-import { combineLatest, map, Observable, filter } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 import { selectorInscriptions } from '../../inscriptions/store/inscription.selectors';
-import { Course } from '../../courses/models';
 
 @Component({
-  selector: 'app-student-detail',
-  templateUrl: './student-detail.component.html',
-  styleUrl: './student-detail.component.scss',
+  selector: 'app-subscriber-detail',
+  templateUrl: './subscriber-detail.component.html',
+  styleUrl: './subscriber-detail.component.scss',
 })
-export class StudentDetailComponent implements OnInit {
+export class SubscriberDetailComponent implements OnInit {
   courseId: string;
-  studentId?: string;
+  subscriberId?: string;
   courses$?: Observable<Course[]>;
-  student$?: Observable<Student>;
+  subscriber$?: Observable<Subscriber>;
   inscriptions$?: Observable<Inscription[]>;
   inscriptionsByStudent$: Observable<Inscription[]>;
   coursesByStudent$?: Observable<Course[]>;
 
   constructor(private activatedRoute: ActivatedRoute, private store: Store) {
     this.courseId = this.activatedRoute.snapshot.params['id'];
-    this.studentId = this.activatedRoute.snapshot.params['id'];
+    this.subscriberId = this.activatedRoute.snapshot.params['id'];
     this.inscriptions$ = this.store.select(selectorInscriptions);
     this.inscriptionsByStudent$ = this.inscriptions$.pipe(
       map((inscriptions) =>
         inscriptions.filter(
-          (inscription) => inscription.studentId === this.studentId
+          (inscription) => inscription.subscriberId === this.subscriberId
         )
       )
     );
-    this.student$ = this.store
-      .select(selectorStudents)
+    this.subscriber$ = this.store
+      .select(selectorSubscribers)
       .pipe(
         map(
           (students) =>
-            students.find((student) => student.id === this.studentId)!
+            students.find((student) => student.id === this.subscriberId)!
         )
       );
 
@@ -61,7 +63,7 @@ export class StudentDetailComponent implements OnInit {
     );
   }
   ngOnInit(): void {
-    this.store.dispatch(StudentActions.loadStudents());
+    this.store.dispatch(SubscriberActions.loadSubscribers());
     this.store.dispatch(CourseActions.loadCourses());
     this.store.dispatch(InscriptionActions.loadInscriptions());
   }

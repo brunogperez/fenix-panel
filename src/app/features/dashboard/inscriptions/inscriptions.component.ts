@@ -7,15 +7,15 @@ import {
   Subject,
 } from 'rxjs';
 import { Inscription } from './models';
-import { Student } from '../students/models';
+import { Subscriber } from '../subscribers/models';
 import { MatDialog } from '@angular/material/dialog';
 import { InscriptionDialogComponent } from './inscription-dialog/inscription-dialog.component';
 import { Store } from '@ngrx/store';
 import { InscriptionActions } from './store/inscription.actions';
 import { selectorInscriptions } from './store/inscription.selectors';
 import Swal from 'sweetalert2';
-import { StudentActions } from '../students/store/student.actions';
-import { selectorStudents } from '../students/store/student.selectors';
+import { SubscriberActions } from '../subscribers/store/subscriber.actions';
+import { selectorSubscribers } from '../subscribers/store/subscriber.selectors';
 
 @Component({
   selector: 'app-inscriptions',
@@ -27,17 +27,16 @@ export class InscriptionsComponent implements OnInit {
     'id',
     'name',
     'email',
-    'birthdate',
     'createdAt',
     'actions',
   ];
 
   searchTerm$ = new Subject<string>();
-  students$!: Observable<Student[]>;
+  subscribers$!: Observable<Subscriber[]>;
   inscriptions$: Observable<Inscription[]>;
 
   constructor(private matDialog: MatDialog, private store: Store) {
-    this.students$ = this.store.select(selectorStudents);
+    this.subscribers$ = this.store.select(selectorSubscribers);
     this.inscriptions$ = this.store.select(selectorInscriptions);
   }
 
@@ -46,7 +45,7 @@ export class InscriptionsComponent implements OnInit {
     this.searchTerm$
       .pipe(startWith(''), debounceTime(400), distinctUntilChanged())
       .subscribe((term) => {
-        this.store.dispatch(StudentActions.searchStudents({ term }));
+        this.store.dispatch(SubscriberActions.searchSubscribers({ term }));
       });
   }
 

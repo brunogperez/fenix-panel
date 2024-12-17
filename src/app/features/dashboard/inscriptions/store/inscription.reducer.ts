@@ -10,14 +10,14 @@ export interface State {
   isLoadingInscription: boolean;
   loadInscriptionError: Error | null | HttpErrorResponse;
   inscriptions: Inscription[];
-  selectedCourseId: string | null;
+  selectedProductId: string | null;
 }
 
 export const initialState: State = {
   isLoadingInscription: false,
   loadInscriptionError: null,
   inscriptions: [],
-  selectedCourseId: null,
+  selectedProductId: null,
 };
 
 export const reducer = createReducer(
@@ -72,7 +72,7 @@ export const reducer = createReducer(
         ...state.inscriptions,
         {
           id: generateRandomString(25),
-          courseId: action.courseId,
+          productId: action.productId,
           subscriberId: action.subscriberId,
         },
       ],

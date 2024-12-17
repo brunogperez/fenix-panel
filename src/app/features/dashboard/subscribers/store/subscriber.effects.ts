@@ -22,6 +22,7 @@ export class SubscriberEffects {
   loadSubscribersAfterUpdate$: Actions<Action<string>>;
   createSubscribers$: Actions<Action<string>>;
   updateSubscribers$: Actions<Action<string>>;
+  updateRemainingDays$: Actions<Action<string>>;
   deleteSubscribers$: Actions<Action<string>>;
   searchSubscribers$: Actions<Action<string>>;
 
@@ -91,6 +92,25 @@ export class SubscriberEffects {
         )
       );
     });
+
+    this.updateRemainingDays$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(SubscriberActions.updateRemainingDays),
+        mergeMap(({ id, remainingDays }) =>
+          this.subscriberService.updateRemainingDays(id, remainingDays).pipe(
+            map(() =>
+              SubscriberActions.updateRemainingDaysSuccess({
+                id,
+                remainingDays,
+              })
+            ),
+            catchError((error) =>
+              of(SubscriberActions.updateRemainingDaysFailure({ error }))
+            )
+          )
+        )
+      )
+    );
 
     this.deleteSubscribers$ = createEffect(() => {
       return this.actions$.pipe(

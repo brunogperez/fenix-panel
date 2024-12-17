@@ -1,8 +1,8 @@
 <div class="container p-5">
   <form class="example-form text-center">
     <mat-form-field class="col-4">
-      <mat-label>Buscar suscriptor...</mat-label>
-      <input matInput type="search" name="" id="" (input)="search($event)" />
+      <mat-label>Buscar cliente...</mat-label>
+      <input matInput type="search" (input)="search($event)" />
     </mat-form-field>
   </form>
 
@@ -10,41 +10,57 @@
     <div class="demo-button-container m-2">
       <button mat-flat-button (click)="openDialog()">
         <mat-icon>add</mat-icon>
-        Agregar suscriptor
+        Agregar cliente
       </button>
     </div>
 
     <mat-divider></mat-divider>
 
-    @if (isLoading) {
-    <mat-spinner class="mx-auto m-5"></mat-spinner>
-    } @else {
-
-    <table mat-table [dataSource]="subscriber$" class="bg-table">
+    <table mat-table [dataSource]="dataSource" matSort class="bg-table">
+      <!-- ID Column -->
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
         <td mat-cell *matCellDef="let subscriber">{{ subscriber.id }}</td>
       </ng-container>
 
+      <!-- Name Column -->
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
         <td mat-cell *matCellDef="let subscriber">
           {{ subscriber | userFullName }}
         </td>
       </ng-container>
 
+      <!-- Email Column -->
       <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
         <td mat-cell *matCellDef="let subscriber">{{ subscriber.email }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="createdAt">
-        <th mat-header-cell *matHeaderCellDef>Created Date</th>
-        <td mat-cell *matCellDef="let subscriber">
-          {{ subscriber.createdAt | date }}
+      <!-- Phone Column -->
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone</th>
+        <td mat-cell *matCellDef="let subscriber">{{ subscriber.phone }}</td>
+      </ng-container>
+
+      <!-- Remaining Days Column -->
+      <ng-container matColumnDef="remainingDays">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Días Restantes
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let subscriber"
+          [ngClass]="{
+            'text-danger': subscriber.remainingDays <= 3,
+            'text-warning': subscriber.remainingDays <= 7
+          }"
+        >
+          {{ subscriber.remainingDays }}
         </td>
       </ng-container>
 
+      <!-- Actions Column -->
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let subscriber">
@@ -66,6 +82,13 @@
           <button
             mat-icon-button
             class="m-1"
+            (click)="copySubscriber(subscriber)"
+          >
+            <mat-icon>content_copy</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            class="m-1"
             (click)="onDelete(subscriber.id)"
             *ngIf="(isAdmin$ | async) == true"
           >
@@ -77,6 +100,5 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-    }
   </div>
 </div>

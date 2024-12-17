@@ -1,7 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Subscriber } from '../models';
 
-
 export const SubscriberActions = createActionGroup({
   source: 'Subscriber',
   events: {
@@ -16,6 +15,16 @@ export const SubscriberActions = createActionGroup({
     'Update Subscriber': props<{ id: string; update: Partial<Subscriber> }>(),
     'Update Subscriber Success': props<{ subscriber: Subscriber }>(),
     'Update Subscriber Failure': props<{ error: Error }>(),
+
+    'Update Remaining Days': props<{
+      id: string;
+      remainingDays: number;
+    }>(),
+    'Update Remaining Days Success': props<{
+      id: string;
+      remainingDays: number;
+    }>(),
+    'Update Remaining Days Failure': props<{ error: any }>(),
 
     'Delete Subscriber': props<{ id: string }>(),
     'Delete Subscriber Success': props<{ data: Subscriber[] }>(),

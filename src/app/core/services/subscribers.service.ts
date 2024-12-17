@@ -4,7 +4,6 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Subscriber } from '../../features/dashboard/subscribers/models';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -41,6 +40,12 @@ export class SubscriberService {
     return this.httpClient
       .patch<Subscriber>(`${this.apiBaseURL}/subscribers/${id}`, update)
       .pipe(concatMap(() => this.getSubscribers()));
+  }
+
+  updateRemainingDays(id: string, remainingDays: number): Observable<void> {
+    return this.httpClient.patch<void>(`${this.apiBaseURL}/subscribers/${id}`, {
+      remainingDays,
+    });
   }
 
   removeSubscriberById(id: string): Observable<Subscriber[]> {

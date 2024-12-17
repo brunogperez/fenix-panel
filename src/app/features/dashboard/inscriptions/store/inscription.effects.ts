@@ -46,14 +46,18 @@ export class InscriptionEffects {
       return this.actions$.pipe(
         ofType(InscriptionActions.loadInscriptionsByCourse),
         mergeMap((action) =>
-          this.inscriptionService.getInscriptionsByCourse(action.courseId).pipe(
-            map((data) =>
-              InscriptionActions.loadInscriptionsByCourseSuccess({ data })
-            ),
-            catchError((error) =>
-              of(InscriptionActions.loadInscriptionsByCourseFailure({ error }))
+          this.inscriptionService
+            .getInscriptionsByCourse(action.productId)
+            .pipe(
+              map((data) =>
+                InscriptionActions.loadInscriptionsByCourseSuccess({ data })
+              ),
+              catchError((error) =>
+                of(
+                  InscriptionActions.loadInscriptionsByCourseFailure({ error })
+                )
+              )
             )
-          )
         )
       );
     });
@@ -65,7 +69,7 @@ export class InscriptionEffects {
           this.inscriptionService
             .createInscription({
               subscriberId: action.subscriberId,
-              courseId: action.courseId,
+              productId: action.productId,
             })
             .pipe(
               map((data) =>

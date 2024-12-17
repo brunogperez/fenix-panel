@@ -20,9 +20,9 @@ export class DashboardComponent {
   routeNames: { [key: string]: string } = {
     '/home': 'Inicio',
     '/users': 'Usuarios',
-    '/subscribers': 'Suscriptores',
-    '/courses': 'Cursos',
-    '/inscriptions': 'Inscripciones',
+    '/subscribers': 'Clientes',
+    '/products': 'Productos',
+    '/inscriptions': 'Renovaciones',
   };
 
   constructor(private router: Router, private authService: AuthService) {

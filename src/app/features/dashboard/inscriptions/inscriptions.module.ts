@@ -11,8 +11,8 @@ import { StoreModule } from '@ngrx/store';
 import { inscriptionFeature } from './store/inscription.reducer';
 import { subscriberFeature } from '../subscribers/store/subscriber.reducer';
 import { SubscriberEffects } from '../subscribers/store/subscriber.effects';
-import { courseFeature } from '../courses/store/course.reducer';
-import { CourseEffects } from '../courses/store/course.effects';
+import { productFeature } from '../products/store/product.reducer';
+import { ProductEffects } from '../products/store/product.effects';
 
 @NgModule({
   declarations: [InscriptionsComponent, InscriptionDialogComponent],
@@ -24,8 +24,8 @@ import { CourseEffects } from '../courses/store/course.effects';
     EffectsModule.forFeature([InscriptionEffects]),
     StoreModule.forFeature(subscriberFeature),
     EffectsModule.forFeature([SubscriberEffects]),
-    StoreModule.forFeature(courseFeature),
-    EffectsModule.forFeature([CourseEffects]),
+    StoreModule.forFeature(productFeature),
+    EffectsModule.forFeature([ProductEffects]),
   ],
 })
 export class InscriptionsModule {}

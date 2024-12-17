@@ -60,6 +60,18 @@ export const reducer = createReducer(
     };
   }),
 
+
+  on(SubscriberActions.updateRemainingDaysSuccess, (state, { id, remainingDays }) => ({
+    ...state,
+    subscribers: state.subscribers.map((subscriber) =>
+      subscriber.id === id ? { ...subscriber, remainingDays } : subscriber
+    ),
+  })),
+  on(SubscriberActions.updateRemainingDaysFailure, (state, { error }) => ({
+    ...state,
+    error,
+  })),
+
   ////////// SECCION DELETE
   on(SubscriberActions.deleteSubscriber, (state, { id }) => ({
     ...state,

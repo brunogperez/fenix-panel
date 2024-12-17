@@ -21,6 +21,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [UserFullNamePipe, AgePipe, FontSizeDirective],
@@ -46,7 +47,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatBadgeModule,
     MatListModule,
     MatGridListModule,
-    MatTabsModule,
+    MatSortModule,
   ],
 })
 export class SharedModule {}

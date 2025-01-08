@@ -1,15 +1,22 @@
-<h1 mat-dialog-title>Formulario de Renovación</h1>
+<h1 mat-dialog-title>Renovar suscripción</h1>
 
 <div mat-dialog-content>
-  <form [formGroup]="inscriptionForm">
+  <form [formGroup]="renovationForm">
+    <div class="row">
+      <mat-form-field class="col-6">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="firstName" type="text" />
+      </mat-form-field>
+
+      <mat-form-field class="col-6">
+        <mat-label>Apellido</mat-label>
+        <input matInput formControlName="lastName" type="text" />
+      </mat-form-field>
+    </div>
 
     <mat-form-field class="col-12">
-      <mat-label> ID del alumno </mat-label>
-      <input matInput formControlName="subscriberId" />
-    </mat-form-field>
-    <mat-form-field class="col-12">
       <mat-label> Vencimiento </mat-label>
-      <input matInput formControlName="subscriptionEndDate"/>
+      <input matInput formControlName="subscriptionEndDate" [value]="subscriptionEndDate | date:'yyyy-MM-dd'"  (input)="updateDate($event)"  />
     </mat-form-field>
 
     <mat-form-field class="col-12">

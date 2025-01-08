@@ -5,17 +5,22 @@
       <a mat-list-item routerLink="home">Inicio</a>
       <a mat-list-item routerLink="users" *ngIf="isAdmin$ | async">Usuarios</a>
       <a mat-list-item routerLink="subscribers">Clientes</a>
-      <a mat-list-item routerLink="products">Productos</a>
-      <a mat-list-item routerLink="inscriptions">Renovaciones</a>
+      <!-- <a mat-list-item routerLink="products">Productos</a> -->
+      <!-- <a mat-list-item routerLink="inscriptions">Renovaciones</a> -->
+
+      <button mat-button class="logout" (click)="logout()">
+        <p class="m-auto">Cerrar sesión</p>
+      </button>
     </mat-nav-list>
   </mat-drawer>
 
   <!-- SECCION DERECHA DEL CONTENIDO -->
   <div class="example-sidenav-content">
     <div>
-      <mat-toolbar class="d-flex justify-content-between w-100 h-100 p-3 align-items-center">
+      <mat-toolbar
+        class="d-flex justify-content-between w-100 h-100 p-3 align-items-center"
+      >
         <div>
-    
           <img
             src="https://imgs.search.brave.com/OwPhMJ6hvN8Ljp4XMetWVT9FRFuesoNMzJ2H1LtzVl8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4t/MC5lbW9qaXMud2lr/aS9lbW9qaS1waWNz/L2dvb2dsZS9waG9l/bml4LWdvb2dsZS5w/bmc"
             alt="Logo de Fenix"
@@ -35,10 +40,6 @@
             {{ authUser.firstName | titlecase }}
             {{ authUser.lastName | titlecase }}
           </p>
-          <button mat-flat-button class="logout" (click)="logout()">
-            <mat-icon> logout </mat-icon>
-            <p class="m-auto">Logout</p>
-          </button>
         </div>
       </mat-toolbar>
 

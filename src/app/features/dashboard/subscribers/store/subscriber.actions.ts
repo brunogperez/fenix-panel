@@ -26,6 +26,16 @@ export const SubscriberActions = createActionGroup({
     }>(),
     'Update Remaining Days Failure': props<{ error: any }>(),
 
+    'Update Subscription End Date': props<{
+      subscriberId: string;
+      subscriptionEndDate: string;
+    }>(),
+    'Update Subscription End Date Success': props<{
+      subscriberId: string;
+      subscriptionEndDate: string;
+    }>(),
+    'Update Subscription End Date Failure': props<{ error: any }>(),
+
     'Delete Subscriber': props<{ id: string }>(),
     'Delete Subscriber Success': props<{ data: Subscriber[] }>(),
     'Delete Subscriber Failure': props<{ error: Error }>(),

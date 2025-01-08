@@ -43,28 +43,6 @@
     </mat-card>
   </div>
 
-  <div *ngIf="productsBySubscriber$ | async as productsBySubscriber" class="m-4">
-    <ng-container *ngIf="productsBySubscriber.length > 0; else noStudents">
-      <mat-card class="border rounded m-5 p-5 border-3">
-        <h3 class="text-center m-2">Servicios suscriptos</h3>
-        <mat-card
-          *ngFor="let product of productsBySubscriber"
-          class="border rounded m-3 d-flex"
-        >
-          <mat-card-header>
-            <mat-card-title> {{ product.name }} </mat-card-title>
-            <mat-card-subtitle>ID: {{ product.id }}</mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-actions align="end">
-            <button mat-flat-button (click)="onDeleteInscription(product.id)">
-              Eliminar suscripción
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </mat-card>
-    </ng-container>
-  </div>
-
   <ng-template #noStudents>
     <mat-card class="border rounded m-5 p-5 border-3">
       <div class="d-flex flex-column align-items-center">

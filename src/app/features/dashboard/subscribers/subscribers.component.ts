@@ -1,6 +1,5 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { SubscriberDialogComponent } from './subscriber-dialog/subscriber-dialog.component';
 import { Subscriber } from './models';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,6 +23,8 @@ import {
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
+import { RenovationDialogComponent } from './renovation-dialog/renovation-dialog.component';
+import { SubscriberDialogComponent } from './subscriber-dialog/subscriber-dialog.component';
 
 @Component({
   selector: 'app-subscribers',
@@ -31,12 +32,16 @@ import {
   styleUrl: './subscribers.component.scss',
 })
 export class SubscriberComponent implements OnInit {
+  SubscriberDialogComponent = SubscriberDialogComponent; 
+  RenovationDialogComponent = RenovationDialogComponent;
+
   displayedColumns: string[] = [
-    'id',
     'name',
     'email',
     'phone',
     'remainingDays',
+    'endSubscriptionDate',
+    'renovations',
     'actions',
   ];
   user$: Observable<User | null>;
@@ -49,6 +54,8 @@ export class SubscriberComponent implements OnInit {
   isLoading = false;
 
   private _snackBar = inject(MatSnackBar);
+  horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -63,75 +70,13 @@ export class SubscriberComponent implements OnInit {
     this.subscriber$ = this.store.select(selectorSubscribers);
   }
 
-  /*   ngOnInit(): void {
+  ngOnInit(): void {
+    this.store.dispatch(SubscriberActions.loadSubscribers());
+
     this.searchTerm$
       .pipe(startWith(''), debounceTime(400), distinctUntilChanged())
       .subscribe((term) => {
         this.store.dispatch(SubscriberActions.searchSubscribers({ term }));
-      });
-
-
-
-    this.subscriber$.subscribe((subscribers) => {
-      const today = new Date();
-      this.dataSource.data = subscribers.map((subscriber) => {
-        const subscriptionEndDate = new Date(subscriber.subscriptionEndDate);
-        const remainingDays = Math.max(
-          Math.ceil(
-            (subscriptionEndDate.getTime() - today.getTime()) /
-              (1000 * 60 * 60 * 24)
-          ),
-          0 // Si ya expiró, días restantes es 0
-        );
-        return { ...subscriber, subscriptionEndDate, remainingDays };
-      });
-    });
-  } */
-
-  ngOnInit(): void {
-    this.store.dispatch(SubscriberActions.loadSubscribers());
-
-    this.subscriber$
-      .pipe(
-        map((subscribers) => {
-          const today = new Date();
-
-          return subscribers.map((subscriber) => {
-            const subscriptionEndDate = new Date(
-              subscriber.subscriptionEndDate
-            );
-            const remainingDays = Math.max(
-              Math.ceil(
-                (subscriptionEndDate.getTime() - today.getTime()) /
-                  (1000 * 60 * 60 * 24)
-              ),
-              0
-            );
-
-            if (subscriber.remainingDays !== remainingDays) {
-              this.store.dispatch(
-                SubscriberActions.updateRemainingDays({
-                  id: subscriber.id,
-                  remainingDays,
-                })
-              );
-            }
-
-            return {
-              ...subscriber,
-              subscriptionEndDate,
-              remainingDays,
-            };
-          });
-        })
-      )
-      .subscribe({
-        next: (updatedSubscribers) => {
-          this.dataSource.data = updatedSubscribers;
-        },
-        error: (err) => {
-          console.error('Error loading subscribers:', err);
-        },
       });
   }
 
@@ -148,9 +93,9 @@ export class SubscriberComponent implements OnInit {
     this.router.navigate([id, 'detail'], { relativeTo: this.activatedRoute });
   }
 
-  openDialog(editSubscriber?: Subscriber): void {
+  openDialog(dialogComponent: any, editSubscriber?: Subscriber): void {
     this.matDialog
-      .open(SubscriberDialogComponent, { data: { editSubscriber } })
+      .open(dialogComponent, { data: { editSubscriber } })
       .afterClosed()
       .subscribe({
         next: (res) => {
@@ -170,6 +115,17 @@ export class SubscriberComponent implements OnInit {
           }
         },
       });
+  }
+
+  sendWhatsAppMessage(clientNumber:number): void {
+    const phoneNumber = clientNumber; 
+    const message = encodeURIComponent(
+      'Estimado cliente. Su suscripción a fenixIPTV está por vencer. Si desea renovarla, por favor comuníquese con nosotros.'
+    );
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+
+    // Abrir el enlace en una nueva ventana/pestaña
+    window.open(whatsappUrl, '_blank');
   }
 
   copySubscriber(subscriber: Subscriber): void {
@@ -215,16 +171,6 @@ export class SubscriberComponent implements OnInit {
       if (result.isConfirmed) {
         this.store.dispatch(SubscriberActions.deleteSubscriber({ id }));
       }
-    });
-  }
-
-  horizontalPosition: MatSnackBarHorizontalPosition = 'end';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
-
-  openSnackBar() {
-    this._snackBar.open('Cannonball!!', 'Splash', {
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
     });
   }
 }

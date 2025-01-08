@@ -70,13 +70,12 @@ export class InscriptionService {
       );
   }
 
-  isStudentEnrolled(
+  isEnrolled(
     subscriberId: string,
-    courseId: string
   ): Observable<boolean> {
     return this.httpClient
       .get<Inscription[]>(
-        `${this.apiBaseURL}/inscriptions?subscriberId=${subscriberId}&courseId=${courseId}`
+        `${this.apiBaseURL}/inscriptions?subscriberId=${subscriberId}`
       )
       .pipe(map((inscriptions) => inscriptions.length > 0));
   }

@@ -8,7 +8,8 @@
 
   <div class="p-2 rounded-4 bg-table">
     <div class="demo-button-container m-2">
-      <button mat-flat-button (click)="openDialog()">
+      <!-- <button mat-flat-button (click)="openDialog()"> -->
+      <button mat-flat-button (click)="openDialog(SubscriberDialogComponent)">
         <mat-icon>add</mat-icon>
         Agregar cliente
       </button>
@@ -16,13 +17,7 @@
 
     <mat-divider></mat-divider>
 
-    <table mat-table [dataSource]="dataSource" matSort class="bg-table">
-      <!-- ID Column -->
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-        <td mat-cell *matCellDef="let subscriber">{{ subscriber.id }}</td>
-      </ng-container>
-
+    <table mat-table [dataSource]="subscriber$" matSort class="bg-table">
       <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
@@ -60,6 +55,36 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="endSubscriptionDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Vencimiento</th>
+        <td mat-cell *matCellDef="let subscriber">
+          {{ subscriber.subscriptionEndDate | date : "dd/MM/yyyy" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="renovations">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Renovaciones</th>
+        <td mat-cell *matCellDef="let subscriber">
+          <button
+            mat-icon-button
+            class="m-1"
+            (click)="openDialog(RenovationDialogComponent, subscriber)"
+            *ngIf="(isAdmin$ | async) == true"
+          >
+            <mat-icon>currency_exchange</mat-icon>
+          </button>
+
+          <button
+            mat-icon-button
+            class="m-1"
+            class="whatsapp-button"
+            (click)="sendWhatsAppMessage(subscriber.phone)"
+          >
+            <mat-icon>sms</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
       <!-- Actions Column -->
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
@@ -74,11 +99,12 @@
           <button
             mat-icon-button
             class="m-1"
-            (click)="openDialog(subscriber)"
+            (click)="openDialog(SubscriberDialogComponent, subscriber)"
             *ngIf="(isAdmin$ | async) == true"
           >
             <mat-icon>edit</mat-icon>
           </button>
+
           <button
             mat-icon-button
             class="m-1"

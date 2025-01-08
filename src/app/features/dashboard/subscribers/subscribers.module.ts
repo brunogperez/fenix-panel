@@ -12,14 +12,15 @@ import { StoreModule } from '@ngrx/store';
 import { subscriberFeature } from './store/subscriber.reducer';
 import { inscriptionFeature } from '../inscriptions/store/inscription.reducer';
 import { InscriptionEffects } from '../inscriptions/store/inscription.effects';
-import { productFeature } from '../products/store/product.reducer';
-import { ProductEffects } from '../products/store/product.effects';
+import { RenovationDialogComponent } from './renovation-dialog/renovation-dialog.component';
+
 
 @NgModule({
   declarations: [
     SubscriberComponent,
     SubscriberDialogComponent,
     SubscriberDetailComponent,
+    RenovationDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -29,8 +30,7 @@ import { ProductEffects } from '../products/store/product.effects';
     EffectsModule.forFeature([SubscriberEffects]),
     StoreModule.forFeature(inscriptionFeature),
     EffectsModule.forFeature([InscriptionEffects]),
-    StoreModule.forFeature(productFeature),
-    EffectsModule.forFeature([ProductEffects]),
+
   ],
 })
 export class SubscribersModule {}

@@ -3,15 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Inscription } from '../models';
 import Swal from 'sweetalert2';
-import { Observable } from 'rxjs';
-import { InscriptionService } from '../../../../core/services/inscriptions.service';
 import { Store } from '@ngrx/store';
 import { InscriptionActions } from '../store/inscription.actions';
-import { selectProduct } from '../../products/store/product.selectors';
-import { Product } from '../../products/models';
+import { SubscriberActions } from '../../subscribers/store/subscriber.actions';
+import { Subscriber } from '../../subscribers/models';
 
 interface InscriptionDialogData {
   inscription?: Inscription;
+  subscriber?: Subscriber;
 }
 
 @Component({
@@ -21,65 +20,75 @@ interface InscriptionDialogData {
 })
 export class InscriptionDialogComponent {
   inscriptionForm: FormGroup;
-  products$: Observable<Product[]>;
 
   constructor(
     private matDialogRef: MatDialogRef<InscriptionDialogData>,
     private formBuilder: FormBuilder,
-    private inscriptionService: InscriptionService,
     private store: Store,
     @Inject(MAT_DIALOG_DATA) public data?: InscriptionDialogData
   ) {
-    this.products$ = this.store.select(selectProduct);
     this.inscriptionForm = this.formBuilder.group({
       subscriberId: [{ value: '', disabled: true }],
-      productId: [null, Validators.required],
+      subscriptionEndDate: [{ value: '', disabled: true }],
+      additionalDays: [null, Validators.required],
     });
     this.inscriptionForm.patchValue({
       subscriberId: data?.inscription?.id,
+      subscriptionEndDate: data?.subscriber?.subscriptionEndDate,
     });
   }
 
   get subscriberIdControl() {
     return this.inscriptionForm.get('subscriberId');
   }
-  get productIdControl() {
-    return this.inscriptionForm.get('productId');
+  get additionalDaysControl() {
+    return this.inscriptionForm.get('additionalDays');
+  }
+  get endDateControl() {
+    return this.inscriptionForm.get('subscriptionEndDate');
   }
 
+  private calculateNewSubscriptionEndDate(additionalDays: number): Date {
+    let baseDate = new Date(); // Fecha actual por defecto
+
+    // Usar la fecha de fin actual del suscriptor si está disponible
+    if (this.data?.subscriber?.subscriptionEndDate) {
+      baseDate = new Date(this.data.subscriber?.subscriptionEndDate);
+    }
+
+    // Sumar los días adicionales
+    baseDate.setDate(baseDate.getDate() + additionalDays * 30);
+
+    return baseDate;
+  }
   onSave(): void {
     if (this.inscriptionForm.invalid) {
       this.inscriptionForm.markAllAsTouched();
     } else {
       const formValues = this.inscriptionForm.getRawValue();
       const subscriberId = formValues.subscriberId;
-      const productId = formValues.productId;
+      const additionalDays = formValues.additionalDays;
 
-      this.inscriptionService
-        .isStudentEnrolled(subscriberId, productId)
-        .subscribe((isEnrolled) => {
-          if (isEnrolled) {
-            Swal.fire(
-              'Atención',
-              'El alumno ya está suscripto.',
-              'info'
-            );
-          } else {
-            this.store.dispatch(
-              InscriptionActions.createInscription({
-                subscriberId,
-                productId,
-              })
-            );
-            Swal.fire(
-              'Buen trabajo!',
-              'El alumno ha sido suscripto exitosamente.',
-              'success'
-            ).then(() => {
-              this.matDialogRef.close();
-            });
-          }
-        });
+      // Calcular la nueva fecha de suscripción con los días adicionales
+      const newSubscriptionEndDate =
+        this.calculateNewSubscriptionEndDate(additionalDays);
+
+      // Actualizar la fecha de suscripción del suscriptor en el store
+      this.store.dispatch(
+        SubscriberActions.updateSubscriptionEndDate({
+          subscriberId,
+          subscriptionEndDate: newSubscriptionEndDate.toISOString(),
+        })
+      );
+
+      this.store.dispatch(InscriptionActions.createInscription(formValues));
+      Swal.fire(
+        'Buen trabajo!',
+        'Proceso de inscripción completado exitosamente.',
+        'success'
+      ).then(() => {
+        this.matDialogRef.close();
+      });
     }
   }
 }

@@ -72,6 +72,16 @@ export const reducer = createReducer(
     error,
   })),
 
+
+  on(SubscriberActions.updateSubscriptionEndDate, (state, { subscriberId, subscriptionEndDate }) => ({
+    ...state,
+    subscribers: state.subscribers.map((subscriber) =>
+      subscriber.id === subscriberId
+        ? { ...subscriber, subscriptionEndDate: new Date(subscriptionEndDate) }
+        : subscriber
+    ),
+  })),
+
   ////////// SECCION DELETE
   on(SubscriberActions.deleteSubscriber, (state, { id }) => ({
     ...state,

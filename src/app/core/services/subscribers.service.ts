@@ -48,6 +48,18 @@ export class SubscriberService {
     });
   }
 
+  updateSubscriberEndDate(
+    id: string,
+    subscriptionEndDate: string
+  ): Observable<Subscriber> {
+    return this.httpClient.patch<Subscriber>(
+      `${this.apiBaseURL}/subscribers/${id}`,
+      {
+        subscriptionEndDate,
+      }
+    );
+  }
+
   removeSubscriberById(id: string): Observable<Subscriber[]> {
     return this.httpClient
       .delete<Subscriber>(`${this.apiBaseURL}/subscribers/${id}`)

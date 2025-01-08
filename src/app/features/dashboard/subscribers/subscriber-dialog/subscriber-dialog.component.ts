@@ -27,7 +27,7 @@ export class SubscriberDialogComponent {
       firstName: [null, [nameValidator]],
       lastName: [null, [nameValidator]],
       email: [null, [Validators.required, Validators.email]],
-      
+      phone: [null, [Validators.required, Validators.pattern('^[0-9]*$')]],
     });
     this.patchForm();
   }

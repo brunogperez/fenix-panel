@@ -23,6 +23,7 @@ export class SubscriberEffects {
   createSubscribers$: Actions<Action<string>>;
   updateSubscribers$: Actions<Action<string>>;
   updateRemainingDays$: Actions<Action<string>>;
+  updateSubscriptionEndDate$: Actions<Action<string>>;
   deleteSubscribers$: Actions<Action<string>>;
   searchSubscribers$: Actions<Action<string>>;
 
@@ -108,6 +109,30 @@ export class SubscriberEffects {
               of(SubscriberActions.updateRemainingDaysFailure({ error }))
             )
           )
+        )
+      )
+    );
+
+    this.updateSubscriptionEndDate$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(SubscriberActions.updateSubscriptionEndDate),
+        mergeMap(({ subscriberId, subscriptionEndDate }) =>
+          this.subscriberService
+            .updateSubscriberEndDate(subscriberId, subscriptionEndDate)
+            .pipe(
+              mergeMap(() => [
+                SubscriberActions.updateSubscriptionEndDateSuccess({
+                  subscriberId,
+                  subscriptionEndDate,
+                }),
+                
+              ]),
+              catchError((error) =>
+                of(
+                  SubscriberActions.updateSubscriptionEndDateFailure({ error })
+                )
+              )
+            )
         )
       )
     );

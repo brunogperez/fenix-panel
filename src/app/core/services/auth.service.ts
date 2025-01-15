@@ -25,7 +25,6 @@ export class AuthService {
 
   private handleAuth(users: User[]): User | null {
     if (!!users[0]) {
-      console.log(users[0]);
       this.store.dispatch(AuthActions.setAuthenticatedUser({ user: users[0] }));
       localStorage.setItem('token', users[0].token);
       return users[0];

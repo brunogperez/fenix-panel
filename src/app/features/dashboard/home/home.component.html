@@ -1,4 +1,4 @@
-<mat-grid-list cols="3" rowHeight="16vh">
+<mat-grid-list cols="3" rowHeight="15vh">
   <mat-grid-tile [colspan]="2" [rowspan]="2">
     <mat-card class="p-4 rounded rounded-4 bg-table">
       <div id="weather_wrapper ">
@@ -23,17 +23,15 @@
     </mat-card>
   </mat-grid-tile>
   <mat-grid-tile [colspan]="1" [rowspan]="4">
-    <div class="col-9 me-5">
-      <mat-card class="align-items-start bg-table rounded p-4 m-2">
-        <div class="agenda-widget">
+    <div class="col-9 me-5 ">
+      <mat-card class="align-items-start bg-table rounded p-4 mb-5">
+        <div class="agenda-widget ">
           <p>Agenda de eventos</p>
           <ul class="events">
             <li>
-              <p><strong>Evento:</strong> Fin de clases</p>
-              <p><strong>Fecha:</strong> 29/11/2024</p>
+              <p><strong>No hay eventos por el momento</strong></p>
             </li>
           </ul>
-          <button mat-button>Ver más eventos</button>
         </div>
       </mat-card>
 
@@ -51,19 +49,12 @@
           <h2>Notificaciones</h2>
           <ul>
             <li>
-              <strong>Recordatorio:</strong> Inscripciones abiertas para
-              talleres extracurriculares.
-              <span class="date">19/11/2024</span>
+              <strong>Recordatorio:</strong> Controlar vencimiento de cuotas.
             </li>
+            
             <li>
-              <strong>Examen programado:</strong> Examen final de "Historia" el
-              25/11/2024.
-              <span class="date">Anunciado: 17/11/2024</span>
-            </li>
-            <li>
-              <strong>Aviso:</strong> La institución estará cerrada el
-              20/11/2024 por mantenimiento.
-              <span class="date">Publicado: 16/11/2024</span>
+              <strong>Aviso:</strong> Habrá actualizaciones sin previo aviso
+              <span class="date">Publicado: 15/01/2025</span>
             </li>
           </ul>
         </div>
@@ -74,11 +65,11 @@
     <div class="extra-info bg-table rounded p-4">
       <div>
         <mat-icon>web</mat-icon>
-        <p>Webinars</p>
+        <p>Server</p>
       </div>
       <div>
         <mat-icon>card_giftcard</mat-icon>
-        <p>Beneficios</p>
+        <p>Próximamente</p>
       </div>
       <div>
         <mat-icon>signal_cellular_alt</mat-icon>

@@ -32,8 +32,7 @@ export class RenovationDialogComponent {
       subscriptionEndDate: [{ value: '', disabled: true }],
       additionalDays: [null, Validators.required],
     });
-console.log( this.data?.editSubscriber);
-    this.subscriptionEndDate = '2025-01-01';
+
     this.patchForm();
   }
 

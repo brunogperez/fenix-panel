@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { concatMap, map, Observable } from 'rxjs';
+import { concatMap, forkJoin, map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Subscriber } from '../../features/dashboard/subscribers/models';
@@ -23,9 +23,9 @@ export class SubscriberService {
     return this.httpClient.get<Subscriber[]>(`${this.apiBaseURL}/subscribers`);
   }
 
-  getSubscriberById(id: string): Observable<Subscriber | undefined> {
+  getSubscriberById(id: string): Observable<Subscriber> {
     return this.httpClient.get<Subscriber>(
-      `${this.apiBaseURL}/subscribers/${id}?_embed=inscriptions`
+      `${this.apiBaseURL}/subscribers/${id}`
     );
   }
 
@@ -36,28 +36,29 @@ export class SubscriberService {
       .pipe(map((res: Subscriber[]) => res));
   }
 
-  updateSubscriberById(id: string, update: Partial<Subscriber>) {
+  updateSubscriberById(_id: string, update: Partial<Subscriber>) {
     return this.httpClient
-      .patch<Subscriber>(`${this.apiBaseURL}/subscribers/${id}`, update)
+      .patch<Subscriber>(`${this.apiBaseURL}/subscribers/${_id}`, update)
       .pipe(concatMap(() => this.getSubscribers()));
   }
 
-  updateRemainingDays(id: string, remainingDays: number): Observable<void> {
-    return this.httpClient.patch<void>(`${this.apiBaseURL}/subscribers/${id}`, {
-      remainingDays,
-    });
+  updateRemainingDays(_id: string, remainingDays: number): Observable<Subscriber[]> {
+    return this.httpClient
+      .patch<void>(`${this.apiBaseURL}/subscribers/${_id}`, {
+        remainingDays,
+      })
+      .pipe(concatMap(() => this.getSubscribers()));
   }
 
   updateSubscriberEndDate(
     id: string,
     subscriptionEndDate: string
-  ): Observable<Subscriber> {
-    return this.httpClient.patch<Subscriber>(
-      `${this.apiBaseURL}/subscribers/${id}`,
-      {
+  ): Observable<Subscriber[]> {
+    return this.httpClient
+      .patch<Subscriber>(`${this.apiBaseURL}/subscribers/${id}`, {
         subscriptionEndDate,
-      }
-    );
+      })
+      .pipe(concatMap(() => this.getSubscribers()));
   }
 
   removeSubscriberById(id: string): Observable<Subscriber[]> {

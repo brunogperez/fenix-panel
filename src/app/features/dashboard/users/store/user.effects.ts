@@ -39,8 +39,8 @@ export class UserEffects {
     this.loadUserById$ = createEffect(() =>
       this.actions$.pipe(
         ofType(UserActions.loadUserById),
-        mergeMap(({ id }) =>
-          this.usersService.getUserById(id).pipe(
+        mergeMap(({ _id }) =>
+          this.usersService.getUserById(_id).pipe(
             map((user) => UserActions.loadUserByIdSuccess({  data: user })),
             catchError((error) =>
               of(UserActions.loadUserByIdFailure({ error }))
@@ -78,8 +78,8 @@ export class UserEffects {
       return this.actions$.pipe(
         ofType(UserActions.updateUser),
         distinctUntilChanged(),
-        mergeMap(({ id, update }) =>
-          this.usersService.updateUserById(id, update).pipe(
+        mergeMap(({ _id, update }) =>
+          this.usersService.updateUserById(_id, update).pipe(
             map((user) => {
               const updatedUser = user[0];
               return UserActions.updateUserSuccess({
@@ -98,12 +98,12 @@ export class UserEffects {
     this.deleteUsers$ = createEffect(() => {
       return this.actions$.pipe(
         ofType(UserActions.deleteUser),
-        switchMap(({ id }) =>
-          this.usersService.removeUserById(id).pipe(
+        switchMap(({ _id }) =>
+          this.usersService.removeUserById(_id).pipe(
             map((res) => {
               Swal.fire(
                 '¡Eliminado!',
-                'El curso ha sido eliminado.',
+                'El usuario ha sido eliminado.',
                 'success'
               );
               return UserActions.deleteUserSuccess({ data: res });
@@ -111,7 +111,7 @@ export class UserEffects {
             catchError((error) => {
               Swal.fire(
                 'Error',
-                'Hubo un problema al eliminar el curso.',
+                'Hubo un problema al eliminar el usuario.',
                 'error'
               );
               return of(UserActions.deleteUserFailure({ error }));

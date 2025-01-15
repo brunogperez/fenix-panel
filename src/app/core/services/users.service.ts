@@ -22,11 +22,11 @@ export class UsersService {
   }
 
   getUsers(): Observable<User[]> {
-    return this.httpClient.get<User[]>(`${this.apiBaseURL}/users`);
+    return this.httpClient.get<User[]>(`${this.apiBaseURL}/usersList`);
   }
 
-  getUserById(id: string): Observable<User> {
-    return this.httpClient.get<User>(`${this.apiBaseURL}/users/${id}`);
+  getUserById(_id: string): Observable<User> {
+    return this.httpClient.get<User>(`${this.apiBaseURL}/usersList/${_id}`);
   }
 
   updateUserById(id: string, update: Partial<User>) {

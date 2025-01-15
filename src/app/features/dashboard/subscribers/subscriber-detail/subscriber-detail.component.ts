@@ -16,29 +16,19 @@ import { selectorInscriptions } from '../../inscriptions/store/inscription.selec
   styleUrl: './subscriber-detail.component.scss',
 })
 export class SubscriberDetailComponent implements OnInit {
-  productId: string;
+
   subscriberId?: string;
   subscriber$?: Observable<Subscriber>;
-  inscriptions$?: Observable<Inscription[]>;
-  inscriptionsByStudent$: Observable<Inscription[]>;
+
 
   constructor(private activatedRoute: ActivatedRoute, private store: Store) {
-    this.productId = this.activatedRoute.snapshot.params['id'];
     this.subscriberId = this.activatedRoute.snapshot.params['id'];
-    this.inscriptions$ = this.store.select(selectorInscriptions);
-    this.inscriptionsByStudent$ = this.inscriptions$.pipe(
-      map((inscriptions) =>
-        inscriptions.filter(
-          (inscription) => inscription.subscriberId === this.subscriberId
-        )
-      )
-    );
     this.subscriber$ = this.store
       .select(selectorSubscribers)
       .pipe(
         map(
           (students) =>
-            students.find((student) => student.id === this.subscriberId)!
+            students.find((student) => student._id === this.subscriberId)!
         )
       );
   }

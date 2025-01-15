@@ -74,38 +74,15 @@ console.log( this.data?.editSubscriber);
     }
   }
 
-/*   onSave(): void {
-    if (this.renovationForm.invalid) {
-      this.renovationForm.markAllAsTouched();
-    } else {
-      this.matDialogRef.close({
-        ...this.renovationForm.value,
-        id: this.isEditing
-          ? this.data!.editSubscriber!.id
-          : generateRandomString(25),
-        createdAt: this.isEditing
-          ? this.data!.editSubscriber!.createdAt
-          : new Date(),
-      });
-      Swal.fire(
-        'Buen trabajo!',
-        `El suscriptor ha sido ${
-          this.isEditing ? 'editado' : 'creado'
-        } exitosamente.`,
-        'success'
-      );
-    }
-  } */
 
   private calculateNewSubscriptionEndDate(additionalDays: number): Date {
-    let baseDate = new Date(); // Fecha actual por defecto
+    let baseDate = new Date(); 
 
-    // Usar la fecha de fin actual del suscriptor si está disponible
+    
     if (this.endDateControl?.value) {
       baseDate = new Date(this.endDateControl?.value);
     }
 
-    // Sumar los días adicionales
     baseDate.setDate(baseDate.getDate() + additionalDays * 30);
 
     return baseDate;
@@ -116,7 +93,7 @@ console.log( this.data?.editSubscriber);
       this.renovationForm.markAllAsTouched();
     } else {
       const formValues = this.renovationForm.getRawValue();
-      const subscriberId = this.data?.editSubscriber?.id || '';
+      const subscriberId = this.data?.editSubscriber?._id || '';
       const additionalDays = formValues.additionalDays;
 
       // Calcular la nueva fecha de suscripción con los días adicionales

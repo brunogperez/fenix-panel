@@ -11,7 +11,7 @@ import {
   mergeMap,
   switchMap,
 } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { merge, of } from 'rxjs';
 import { SubscriberActions } from './subscriber.actions';
 import { SubscriberService } from '../../../../core/services/subscribers.service';
 import { InscriptionService } from '../../../../core/services/inscriptions.service';
@@ -125,7 +125,6 @@ export class SubscriberEffects {
                   subscriberId,
                   subscriptionEndDate,
                 }),
-                
               ]),
               catchError((error) =>
                 of(

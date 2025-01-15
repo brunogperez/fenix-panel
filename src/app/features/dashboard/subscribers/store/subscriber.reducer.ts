@@ -50,7 +50,7 @@ export const reducer = createReducer(
   on(SubscriberActions.updateSubscriberSuccess, (state, { subscriber }) => {
     return {
       ...state,
-      subscribers: state.subscribers.map((c) => (c.id === subscriber.id ? subscriber : c)),
+      subscribers: state.subscribers.map((c) => (c._id === subscriber._id ? subscriber : c)),
     };
   }),
   on(SubscriberActions.updateSubscriberFailure, (state, { error }) => {
@@ -64,7 +64,7 @@ export const reducer = createReducer(
   on(SubscriberActions.updateRemainingDaysSuccess, (state, { id, remainingDays }) => ({
     ...state,
     subscribers: state.subscribers.map((subscriber) =>
-      subscriber.id === id ? { ...subscriber, remainingDays } : subscriber
+      subscriber._id === id ? { ...subscriber, remainingDays } : subscriber
     ),
   })),
   on(SubscriberActions.updateRemainingDaysFailure, (state, { error }) => ({
@@ -76,7 +76,7 @@ export const reducer = createReducer(
   on(SubscriberActions.updateSubscriptionEndDate, (state, { subscriberId, subscriptionEndDate }) => ({
     ...state,
     subscribers: state.subscribers.map((subscriber) =>
-      subscriber.id === subscriberId
+      subscriber._id === subscriberId
         ? { ...subscriber, subscriptionEndDate: new Date(subscriptionEndDate) }
         : subscriber
     ),
@@ -85,7 +85,7 @@ export const reducer = createReducer(
   ////////// SECCION DELETE
   on(SubscriberActions.deleteSubscriber, (state, { id }) => ({
     ...state,
-    subscribers: state.subscribers.filter((subscriber) => subscriber.id !== id),
+    subscribers: state.subscribers.filter((subscriber) => subscriber._id !== id),
   })),
   ////////// SECCION SEARCH
 

@@ -8,6 +8,7 @@ import { environment } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
 import { AuthActions } from '../../store/actions/auth.actions';
 import { selectAuthUser } from '../../store/selectors/auth.selectors';
+import { CloseScrollStrategy } from '@angular/cdk/overlay';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -24,7 +25,7 @@ export class AuthService {
 
   private handleAuth(users: User[]): User | null {
     if (!!users[0]) {
-      /*  this._authUser$.next(users[0]); */
+      console.log(users[0]);
       this.store.dispatch(AuthActions.setAuthenticatedUser({ user: users[0] }));
       localStorage.setItem('token', users[0].token);
       return users[0];
@@ -34,24 +35,21 @@ export class AuthService {
   }
 
   login(data: AuthData): Observable<User> {
-    return (
-      this.httpClient
-        .get<User[]>(`${this.apiURL}/users?email=${data.email}`)
-        //Elimine la password de la url para no exponerla
-        .pipe(
-          map((users) => {
-            const user = users.find((user) => user.password === data.password);
-            return this.handleAuth(user ? [user] : []);
-          }),
-          map((user) => {
-            if (user) {
-              return user;
-            } else {
-              throw new Error('Los datos son inválidos');
-            }
-          })
-        )
-    );
+    return this.httpClient
+      .get<User[]>(`${this.apiURL}/users?email=${data.email}`)
+      .pipe(
+        map((users) => {
+          const user = users.find((user) => user.password === data.password);
+          return this.handleAuth(user ? [user] : []);
+        }),
+        map((user) => {
+          if (user) {
+            return user;
+          } else {
+            throw new Error('Los datos son inválidos');
+          }
+        })
+      );
   }
 
   logout() {
@@ -60,6 +58,23 @@ export class AuthService {
     this.router.navigate(['auth', 'login']);
   }
 
+  /*   verifyToken(): Observable<boolean> {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return of(false);
+    }
+
+    return this.httpClient
+      .get<User[]>(`${this.apiURL}/fenix/users?token=${token}`)
+      .pipe(
+        map((users) => {
+          const user = this.handleAuth(users);
+          return !!user;
+        }),
+        catchError(() => of(false))
+      );
+  } */
+
   verifyToken(): Observable<boolean> {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -67,13 +82,18 @@ export class AuthService {
     }
 
     return this.httpClient
-      .get<User[]>(`${this.apiURL}/users?token=${token}`)
+      .get<{ isValid: boolean; user?: User }>(
+        `${this.apiURL}/users/verify-token?token=${token}`
+      )
       .pipe(
-        map((users) => {
-          const user = this.handleAuth(users);
-          return !!user;
+        map((response) => {
+          if (response.isValid) {
+            return true; 
+          } else {
+            return false; 
+          }
         }),
-        catchError(() => of(false))
+        catchError(() => of(false)) 
       );
   }
 

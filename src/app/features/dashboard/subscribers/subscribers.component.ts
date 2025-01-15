@@ -32,7 +32,7 @@ import { SubscriberDialogComponent } from './subscriber-dialog/subscriber-dialog
   styleUrl: './subscribers.component.scss',
 })
 export class SubscriberComponent implements OnInit {
-  SubscriberDialogComponent = SubscriberDialogComponent; 
+  SubscriberDialogComponent = SubscriberDialogComponent;
   RenovationDialogComponent = RenovationDialogComponent;
 
   displayedColumns: string[] = [
@@ -72,12 +72,13 @@ export class SubscriberComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(SubscriberActions.loadSubscribers());
-
     this.searchTerm$
       .pipe(startWith(''), debounceTime(400), distinctUntilChanged())
       .subscribe((term) => {
         this.store.dispatch(SubscriberActions.searchSubscribers({ term }));
       });
+
+    this.executeOncePerDay();
   }
 
   ngAfterViewInit(): void {
@@ -89,8 +90,8 @@ export class SubscriberComponent implements OnInit {
     this.searchTerm$.next(element.value);
   }
 
-  goToDetail(id: string): void {
-    this.router.navigate([id, 'detail'], { relativeTo: this.activatedRoute });
+  goToDetail(_id: string): void {
+    this.router.navigate([_id, 'detail'], { relativeTo: this.activatedRoute });
   }
 
   openDialog(dialogComponent: any, editSubscriber?: Subscriber): void {
@@ -103,7 +104,7 @@ export class SubscriberComponent implements OnInit {
             if (editSubscriber) {
               this.store.dispatch(
                 SubscriberActions.updateSubscriber({
-                  id: editSubscriber.id,
+                  id: editSubscriber._id,
                   update: res,
                 })
               );
@@ -117,8 +118,42 @@ export class SubscriberComponent implements OnInit {
       });
   }
 
-  sendWhatsAppMessage(clientNumber:number): void {
-    const phoneNumber = clientNumber; 
+  executeOncePerDay(): void {
+    this.subscriber$
+      .pipe(
+        map((subscribers) =>
+          subscribers.map((subscriber) => {
+            const subscriptionEndDate = new Date(
+              subscriber.subscriptionEndDate
+            );
+            const remainingDays = Math.max(
+              Math.ceil(
+                (subscriptionEndDate.getTime() - Date.now()) /
+                  (1000 * 60 * 60 * 24)
+              ),
+              0
+            );
+
+            if (subscriber.remainingDays !== remainingDays) {
+              this.store.dispatch(
+                SubscriberActions.updateRemainingDays({
+                  id: subscriber._id,
+                  remainingDays,
+                })
+              );
+            }
+
+            return { ...subscriber, subscriptionEndDate, remainingDays };
+          })
+        )
+      )
+      .subscribe({
+        error: (err) => console.error('Error updating subscribers:', err),
+      });
+  }
+
+  sendWhatsAppMessage(clientNumber: number): void {
+    const phoneNumber = clientNumber;
     const message = encodeURIComponent(
       'Estimado cliente. Su suscripción a fenixIPTV está por vencer. Si desea renovarla, por favor comuníquese con nosotros.'
     );
@@ -134,7 +169,7 @@ export class SubscriberComponent implements OnInit {
     ).toLocaleDateString();
 
     const subscriberData = `
-    ID: ${subscriber.id}
+    ID: ${subscriber._id}
     Name: ${subscriber.firstName} ${subscriber.lastName}
     Email: ${subscriber.email}
     Phone: ${subscriber.phone}

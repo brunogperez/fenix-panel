@@ -26,7 +26,7 @@ export class UsersComponent implements OnInit {
   ];
   users$: Observable<User[]>;
   isLoading = false;
-  dataSource: User[] = [];
+ 
 
   constructor(
     private matDialog: MatDialog,
@@ -41,8 +41,8 @@ export class UsersComponent implements OnInit {
     this.store.dispatch(UserActions.loadUsers());
   }
 
-  goToDetail(id: string): void {
-    this.router.navigate([id, 'detail'], { relativeTo: this.activatedRoute });
+  goToDetail(_id: string): void {
+    this.router.navigate([_id, 'detail'], { relativeTo: this.activatedRoute });
   }
 
   openDialog(editUser?: User): void {
@@ -54,7 +54,7 @@ export class UsersComponent implements OnInit {
           if (!!res) {
             if (editUser) {
               this.store.dispatch(
-                UserActions.updateUser({ id: editUser.id, update: res })
+                UserActions.updateUser({ _id: editUser._id, update: res })
               );
             } else {
               this.store.dispatch(UserActions.createUser({ user: res }));
@@ -64,7 +64,7 @@ export class UsersComponent implements OnInit {
       });
   }
 
-  onDelete(id: string) {
+  onDelete(_id: string) {
     Swal.fire({
       title: '¿Estás seguro?',
       text: 'No podrás revertir esta acción',
@@ -74,7 +74,7 @@ export class UsersComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.store.dispatch(UserActions.deleteUser({ id }));
+        this.store.dispatch(UserActions.deleteUser({ _id }));
       }
     });
   }

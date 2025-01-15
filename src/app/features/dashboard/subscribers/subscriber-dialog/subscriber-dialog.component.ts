@@ -58,11 +58,11 @@ export class SubscriberDialogComponent {
     } else {
       this.matDialogRef.close({
         ...this.subscriberForm.value,
-        id: this.isEditing
-          ? this.data!.editSubscriber!.id
-          : generateRandomString(25),
         createdAt: this.isEditing
           ? this.data!.editSubscriber!.createdAt
+          : new Date(),
+        subscriptionEndDate: this.isEditing
+          ? this.data!.editSubscriber!.subscriptionEndDate
           : new Date(),
       });
       Swal.fire(

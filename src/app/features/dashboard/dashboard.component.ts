@@ -31,9 +31,10 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService,
     private store: Store
   ) {
+    
     this.authUser$ = this.authService.authUser$;
-
     this.isAdmin$ = this.authUser$.pipe(map((user) => user?.role === 'admin'));
+
     this.subscriber$ = this.store.select(selectorSubscribers);
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
@@ -46,50 +47,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.executeOncePerDay();
-  }
-
-  executeOncePerDay(): void {
- /*    const today = new Date().toDateString();
-    const lastExecutionDate = localStorage.getItem('lastSubscriberUpdateDate');
-
-    if (lastExecutionDate === today) return;
-
-    localStorage.setItem('lastSubscriberUpdateDate', today);
- */
-    this.subscriber$
-      .pipe(
-        map((subscribers) =>
-          subscribers.map((subscriber) => {
-            const subscriptionEndDate = new Date(
-              subscriber.subscriptionEndDate
-            );
-            const remainingDays = Math.max(
-              Math.ceil(
-                (subscriptionEndDate.getTime() - Date.now()) /
-                  (1000 * 60 * 60 * 24)
-              ),
-              0
-            );
-            
-            if (subscriber.remainingDays !== remainingDays) {
-              this.store.dispatch(
-                SubscriberActions.updateRemainingDays({
-                  id: subscriber.id,
-                  remainingDays,
-                })
-              );
-            }
-
-            return { ...subscriber, subscriptionEndDate, remainingDays };
-          })
-        )
-      )
-      .subscribe({
-        next: (updatedSubscribers) =>
-          console.log('Subscribers updated:', updatedSubscribers),
-        error: (err) => console.error('Error updating subscribers:', err),
-      });
+    this.authUser$.subscribe((value) => console.log('isAdmin$', value));
   }
 
   logout(): void {
